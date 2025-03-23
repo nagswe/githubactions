@@ -1,13 +1,11 @@
-
-name: Java CI with Maven
+name: CICD Pipeline 
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 jobs:
-  build:
-
+  compile:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,8 +17,9 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
-   security-check:
+      run: mvn compile
+      
+  security-check:
     runs-on: self-hosted
     needs: compile
 
@@ -41,4 +40,5 @@ jobs:
       run: sudo apt install gitleaks -y
     - name: Gitleaks Code Scan
       run: gitleaks detect source . -r gitleaks-report.json -f json
+
     
